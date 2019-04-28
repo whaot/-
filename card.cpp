@@ -2,10 +2,24 @@
 #include<time.h>
 using namespace std;
 struct card 
-{ char color;               //»¨É«
-int value;					//´óĞ¡				
+{ char color='r';               //èŠ±è‰²
+int value='0';					//å¤§å°				
 };
-//½»»»
+char m_col;//ä¸»èŠ±è‰²
+card  arr[54];//ç‰Œå †
+card  Desk[54];//æ¡Œé¢ä¸Šçš„ç‰Œ
+int arr_loc = 0;//ç‰Œå †é¡¶éƒ¨å¯¹åº”æ•°ç»„ä½ç½®
+int Desk_n = 0;//å½“å‰æ¡Œé¢ä¸Šç‰Œæ•°
+void Desk_clean()
+{
+	Desk_n = 0;
+}
+void agetb(card *a,card b)
+{
+	a->color = b.color;
+	a->value = b.value;
+}
+//äº¤æ¢
 void Swap(card a[], card b[])
 {
 	card *temp=new card [8];
@@ -15,39 +29,67 @@ void Swap(card a[], card b[])
 	delete[]temp;
 	
 }
-//Éú³ÉÅÆ¶Ñ
-void Creat_cards(card arr[])
+//ç”Ÿæˆç‰Œå †
+void Creat_cards()
 {
 	for (int i = 0; i < 52; i++)
 	{
-		int col = (i+1) / 13;
-		int val = (i+1) % 13;
+		int col = i / 13;
+		int val = i % 13;
 		if (val == 1)
-			arr[i].value = 14;//A>K>Q>J>10>....>2
+			arr[i].value = 14;//A(14)>K(13)>Q(12)>J(11)>10>....>2
 		else if (val == 0)
 			arr[i].value = 13;//K
 		else
 			arr[i].value = val;
 		switch (col)
 		{
-		case 0:arr[i].color = 'r';//ºìĞÄ
-		case 1:arr[i].color = 'b';//ºÚÌÒ
-		case 2:arr[i].color = 's';//·½Æ¬
-		case 3:arr[i].color = 'f';//Ã·»¨
+		case 0:arr[i].color = 'r'; break;//çº¢å¿ƒ
+		case 1:arr[i].color = 'b'; break;//é»‘æ¡ƒ
+		case 2:arr[i].color = 's'; break;//æ–¹ç‰‡
+		case 3:arr[i].color = 'f'; break;//æ¢…èŠ±
 		}
 	}
-	arr[52].color = 'j'; arr[52].value = 19;//Ğ¡¹í
-	arr[53].color = 'j'; arr[53].value = 20;//´ó¹í
+	arr[52].color = 'j'; arr[52].value = 19;//å°é¬¼
+	arr[53].color = 'j'; arr[53].value = 20;//å¤§é¬¼
 }
-//Ï´ÅÆ
-void Shuffle(card  arr[])				//Ï´ÅÆ
+//æ´—ç‰Œ
+void Shuffle()				//æ´—ç‰Œ
 {
 	for (int i = 53; i >= 0; i--)
 	{
 		srand((unsigned)time(NULL));
 		//Swap(&arr[i], &arr[(rand() + i) % 53]);
-		Swap(&arr[rand() % (i + 1)], &arr[i]);//Ëæ»ú½»»»
+		Swap(&arr[rand() % (i + 1)], &arr[i]);//éšæœºäº¤æ¢
 	}
+}
+int choose_m_col_1()
+{
+	int i;
+	do 
+	{ srand((unsigned)time(NULL)); 
+	i = rand() % 16;//0-15
+	m_col = arr[i].color;
+	}
+	while (m_col == 'j');//ä¸»èŠ±è‰²ä¸å¯ä¸ºé¬¼ç‰Œ
+	return i;
+};
+void choose_m_col()
+{
+	do {
+		Shuffle();
+		m_col = arr[53].color;
+	} while (m_col == 'j');//ä¸å¯ä¸ºé¬¼ç‰Œ
+};
+void Desk_Show()
+{
+	cout << "æ¡Œé¢ç‰Œç»„ ";
+	if (Desk_n > 0)
+	{
+		for (int i = 0; i < Desk_n; i++)
+			cout << Desk[i].color << Desk[i].value << " ";
+	}
+	cout << endl;
 }
 //int main()
 //{
