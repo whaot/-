@@ -12,7 +12,7 @@ extern int Desk_n ;//当前桌面上牌数
 void Desk_clean();//清空桌面牌组,
 int choose_m_col_1();//第一局确定主花色。返回该牌位置。以便展示该牌
 void choose_m_col();//后续几局获得牌堆最后一张牌，花色为主花色。以便展示该牌
-void Swap(card, card);
+void Swap(card a[], card b[]);
 void Creat_cards();
 void Shuffle();
 void agetb(card* a, card b);
