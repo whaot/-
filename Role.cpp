@@ -2,13 +2,13 @@
 
 
 extern char m_col;
-extern card  arr[54];//ÅÆ¶Ñ
-extern card  Desk[54];//×ÀÃæÉÏµÄÅÆ
-extern int arr_loc;//ÅÆ¶Ñ¶¥²¿¶ÔÓ¦Êı×éÎ»ÖÃ
-extern int Desk_n;//µ±Ç°×ÀÃæÉÏÅÆÊı
+extern card  arr[54];//ç‰Œå †
+extern card  Desk[54];//æ¡Œé¢ä¸Šçš„ç‰Œ
+extern int arr_loc;//ç‰Œå †é¡¶éƒ¨å¯¹åº”æ•°ç»„ä½ç½®
+extern int Desk_n;//å½“å‰æ¡Œé¢ä¸Šç‰Œæ•°
 Role::Role(int i)
 {
-	card Cards[30];//ÊÖÅÆÉÏÏŞ30ÕÅ
+	card Cards[30];//æ‰‹ç‰Œä¸Šé™30å¼ 
 	num = 0;
 	NO = i;
 }
@@ -18,64 +18,74 @@ Role::~Role()
 {
 	cout <<NO<< " end"<<endl;
 }
-void Role::Get_cards() //iÎªÅÆ¶ÑÏÖÔÚ¶Ñ¶¥ÅÆËùÔÚÊı×éÎ»ÖÃ
+void Role::Sequence()
+{
+	for (int i = 0; i < num; i++)
+		for (int j = 0; j < num - 1 - i; j++)
+			if (Cards[j].value > Cards[j + 1].value)
+				Swap(&Cards[j], &Cards[j + 1]);
+}
+void Role::Get_cards() //iä¸ºç‰Œå †ç°åœ¨å †é¡¶ç‰Œæ‰€åœ¨æ•°ç»„ä½ç½®
 {
 	if (num < 8)
-		for (; num < 8 && arr_loc < 54; num++, arr_loc++)//ÊÖÅÆ²¹µ½8ÕÅ »òÕß ÅÆ¶ÑºÄ¾¡
+		for (; num < 8 && arr_loc < 54; num++, arr_loc++)//æ‰‹ç‰Œè¡¥åˆ°8å¼  æˆ–è€… ç‰Œå †è€—å°½
 		{
 			agetb(&Cards[num], arr [arr_loc]);
 		}
+	Sequence();
 }
-void Role::GetBack_cards()//*iÎª×ÀÃæÉÏÒÑÓĞÅÆÊı
+void Role::GetBack_cards()//*iä¸ºæ¡Œé¢ä¸Šå·²æœ‰ç‰Œæ•°
 {
 	for (; Desk_n > 0; Desk_n--)
 	{
-		agetb(&Cards[num] , arr[Desk_n - 1]);
+		agetb(&Cards[num] , Desk[Desk_n - 1]);
 		num++;
 	}
 	Desk_clean();
+	Sequence();
 }
 void Role::Show()
 {
-	cout << NO << "ºÅ½ÇÉ« ";
+	cout << NO << "å·è§’è‰² ";
 	for (int i = 0; i < num; i++)
 		cout << Cards[i].color << Cards[i].value << " ";
 	cout << endl;
 }
-bool Role::a_judge( int i, card hand)//²»¶ÔDesk_nÖ±½Ó²Ù×÷
+bool Role::a_judge( int i, card hand)//ä¸å¯¹Desk_nç›´æ¥æ“ä½œ
 {
 	for (; i > 0; i--)
 		if (hand.value == Desk[i - 1].value)
 			return 1;
 	return 0;
 }
-void Role::card_out(int loc)//»ñµÃlocÎªX-1£»µÚXÕÅÅÆ´ò³ö
+void Role::card_out(int loc)//è·å¾—locä¸ºX-1ï¼›ç¬¬Xå¼ ç‰Œæ‰“å‡º
 {
 	for (; loc < num-1; loc++)
-		agetb(&Cards[loc], Cards[(loc + 1)]);//×óÒÆÊı×é
-		num--;							//ÊÖÅÆÊı-1
+		agetb(&Cards[loc], Cards[(loc + 1)]);//å·¦ç§»æ•°ç»„
+		num--;							//æ‰‹ç‰Œæ•°-1
 }
 int Role::Attack( int loc)
 {
-	if (Cards[loc-1].color == 'j')//²»¿É´ò³ö¹íÅÆ
-		return 0;
-	if (loc == 0)
+	
+	if (loc == 0)//é€‰æ‹©ä¸å‡º
 	{
 		if (Desk_n>0)
 			return 2;
 		else
-			return 0;//×ÀÃæÎŞÅÆ£¬´ËÊ±±ØĞë³öÅÆ
+			return 0;//æ¡Œé¢æ— ç‰Œï¼Œæ­¤æ—¶å¿…é¡»å‡ºç‰Œ
 	}
+	if (Cards[loc-1].color == 'j')//ä¸å¯æ‰“å‡ºé¬¼ç‰Œ
+		return 0;
 	bool b;
 	if (Desk_n == 0)
-		b = 1;	//×ÀÃæÎŞÅÆ£¬Ö±½Ó´ò³ö
+		b = 1;	//æ¡Œé¢æ— ç‰Œï¼Œç›´æ¥æ‰“å‡º
 	else
-		 b=a_judge( Desk_n, Cards[loc-1]);//ÅĞ¶ÏÊÇ·ñ¿ÉÒÔ´ò³ö
+		 b=a_judge( Desk_n, Cards[loc-1]);//åˆ¤æ–­æ˜¯å¦å¯ä»¥æ‰“å‡º
 	if (b)
 	{
-		agetb(&Desk[Desk_n], Cards[loc - 1]);//×ÀÃæ»ñµÃÅÆ
-		Desk_n++;							//×ÀÃæÅÆÊı+1
-		card_out(loc - 1);					//³ıÈ¥¸ÃÊÖÅÆ
+		agetb(&Desk[Desk_n], Cards[loc - 1]);//æ¡Œé¢è·å¾—ç‰Œ
+		Desk_n++;							//æ¡Œé¢ç‰Œæ•°+1
+		card_out(loc - 1);					//é™¤å»è¯¥æ‰‹ç‰Œ
 		return 1;
 	}
 	else
@@ -83,11 +93,11 @@ int Role::Attack( int loc)
 }
 bool Role::d_judge(card desk, card hand)
 {
-	if (hand.color == 'j')//¹íÅÆ
+	if (hand.color == 'j')//é¬¼ç‰Œ
 		return 1;
-	if (hand.color == m_col && desk.color != m_col)//Ö÷ÅÆ
+	if (hand.color == m_col && desk.color != m_col)//ä¸»ç‰Œ
 		return 1;
-	if (hand.color == desk.color && hand.value > desk.value)//Í¬»¨É«±È´óĞ¡
+	if (hand.color == desk.color && hand.value > desk.value)//åŒèŠ±è‰²æ¯”å¤§å°
 		return 1;
 	return 0;	
 }
@@ -111,10 +121,10 @@ int Role::Defend(int loc)
 	}
 	if (num == 0)
 	{	
-		return 2;//ÎŞÊÖÅÆ,Ñ¡Ôñ¹ıÅÆ»òÊÕÅÆ
+		return 2;//æ— æ‰‹ç‰Œ,é€‰æ‹©è¿‡ç‰Œæˆ–æ”¶ç‰Œ
 	}
 	else
-		return 1;//ÉĞÓĞÊÖÅÆ
+		return 1;//å°šæœ‰æ‰‹ç‰Œ
 }
 int Role::Check_self(int i)//return !=3
 {
@@ -122,7 +132,7 @@ int Role::Check_self(int i)//return !=3
 	{
 	case 0:GetBack_cards();  Desk_clean(); return 0;
 	case 1:break;
-	case 2:cout << "ÊÇ·ñÖ÷¶¯ÊÕÅÆ?\n0:ÊÕ" << endl; int i; cin >> i; cout << endl;
+	case 2:cout << "æ˜¯å¦ä¸»åŠ¨æ”¶ç‰Œ?\n0:æ”¶" << endl; int i; cin >> i; cout << endl;
 		if (i == 0)
 		{
 			return Check_self(0);
@@ -130,7 +140,7 @@ int Role::Check_self(int i)//return !=3
 		else
 			return 2;
 	case 3:
-		cout << "±¾´ÎÑ¡ÔñÎŞĞ§";
+		cout << "æœ¬æ¬¡é€‰æ‹©æ— æ•ˆ";
 		Check_self(Defend(i = def_get()));//choose_again
 		break;
 	}
@@ -140,9 +150,9 @@ int Role::Check_defender(int i)
 {
 	switch (i)
 	{
-	case 0:Get_cards(); break;// ±¾ÂÖ½áÊø£¬±£³Ö½ø¹¥
+	case 0:Get_cards(); break;// æœ¬è½®ç»“æŸï¼Œä¿æŒè¿›æ”»
 	case 1:break;//
-	case 2:Get_cards();  break;//±¾ÂÖ½áÊø£¬¸Ä±ä¹¥ÊØ
+	case 2:Get_cards();  break;//æœ¬è½®ç»“æŸï¼Œæ”¹å˜æ”»å®ˆ
 	}
 	return i;
 }
