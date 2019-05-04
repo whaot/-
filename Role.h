@@ -3,48 +3,56 @@
 #include<iostream>
 using namespace std;
 extern char m_col;
-extern card  arr[54];//ÅÆ¶Ñ
-extern card  Desk[54];//×ÀÃæÉÏµÄÅÆ
-extern int arr_loc;//ÅÆ¶Ñ¶¥²¿¶ÔÓ¦Êı×éÎ»ÖÃ
-extern int Desk_n;//µ±Ç°×ÀÃæÉÏÅÆÊı
+extern card  arr[54];//ç‰Œå †
+extern card  Desk[54];//æ¡Œé¢ä¸Šçš„ç‰Œ
+extern int arr_loc;//ç‰Œå †é¡¶éƒ¨å¯¹åº”æ•°ç»„ä½ç½®
+extern int Desk_n;//å½“å‰æ¡Œé¢ä¸Šç‰Œæ•°
 class Role
 {
 private:
-	card  Cards[30] ;//ÊÖÅÆ
-	int num;  //ÊÖÅÆÊı
-	int NO;						//½ÇÉ«±àºÅ
+	card  Cards[30] ;//æ‰‹ç‰Œ
+	int num;  //æ‰‹ç‰Œæ•°
+	int NO;						//è§’è‰²ç¼–å·
 public:
 	Role(int i );
 	~Role();
+	void Sequence();
+	char Get_col(int i) { return Cards[i - 1].color; }
+	int  Get_val(int i) { return Cards[i - 1].value; }
 	int Get_num() { return num; }
 	int Get_NO() { return NO; }
 	bool joker_left() { return (Cards[0].color == 'j'); }
-    void Get_cards();//ÅÆ¶Ñ
-	void GetBack_cards();//×ÀÃæÅÆ×é
+    void Get_cards();//ç‰Œå †
+	void GetBack_cards();//æ¡Œé¢ç‰Œç»„
 	void Show();
-	bool a_judge(int i,card hand);//×ÀÃæÅÆ×é,ÊıÁ¿£¬½«Òª´ò³öÊÖÅÆ
+	bool a_judge(int i,card hand);//æ¡Œé¢ç‰Œç»„,æ•°é‡ï¼Œå°†è¦æ‰“å‡ºæ‰‹ç‰Œ
 	bool d_judge(card desk, card hand);
-	int Attack(int loc);//×ÀÃæÅÆ×é£¬×ÀÃæÅÆÊıÁ¿£¬ÊÖÅÆµÄÎ»ÖÃ
-	int Defend(int loc);//·µ»Ø0£¬Ö±½ÓÊÕÅÆ£»·µ»Ø1£¬·ÀÊØ³É¹¦£»
-						//·µ»Ø2£¬ÊÖÅÆºÄ¾¡£¬Ö±½Ó½áÊø±¾ÂÖ,Ñ¡Ôñ¹ıÅÆ»òÊÕÅÆ
-						//·µ»Ø3, ±¾´ÎÑ¡ÔñÎŞĞ§
-	void card_out(int loc);//»ñµÃlocÎªX-1£»µÚXÕÅÅÆ´ò³ö
-	//´ıĞŞ¸Ä°æ±¾¡ı
+	int Attack(int loc);//æ¡Œé¢ç‰Œç»„ï¼Œæ¡Œé¢ç‰Œæ•°é‡ï¼Œæ‰‹ç‰Œçš„ä½ç½®
+	int Defend(int loc);//è¿”å›0ï¼Œç›´æ¥æ”¶ç‰Œï¼›è¿”å›1ï¼Œé˜²å®ˆæˆåŠŸï¼›
+						//è¿”å›2ï¼Œæ‰‹ç‰Œè€—å°½ï¼Œç›´æ¥ç»“æŸæœ¬è½®,é€‰æ‹©è¿‡ç‰Œæˆ–æ”¶ç‰Œ
+						//è¿”å›3, æœ¬æ¬¡é€‰æ‹©æ— æ•ˆ
+	void card_out(int loc);//è·å¾—locä¸ºX-1ï¼›ç¬¬Xå¼ ç‰Œæ‰“å‡º
+	//å¾…ä¿®æ”¹ç‰ˆæœ¬â†“
 	int att_get()
 	{
 		int i;
-		cout << "ÊäÈë" << NO << "Íæ¼Ò½ø¹¥Ê±´ò³öµÚ¼¸ÕÅÅÆ"<<endl;
-		cin >> i;
-		cout << endl;
+		do {
+			cout << "è¾“å…¥" << NO << "ç©å®¶è¿›æ”»æ—¶æ‰“å‡ºç¬¬å‡ å¼ ç‰Œ" << endl;
+			cin >> i;
+			cout << endl;} 
+		while (i<0 || i>num);
 		return i;
 	}
-	//´ıĞŞ¸Ä°æ±¾¡ı
+	//å¾…ä¿®æ”¹ç‰ˆæœ¬â†“
 	int def_get()
 	{
-		int i;
-		cout << "ÊäÈë" << NO << "Íæ¼Ò·ÀÊØÊ±´ò³öµÚ¼¸ÕÅÅÆ" << endl;
-		cin >> i;
-		cout << endl;
+		int i; do {
+
+
+			cout << "è¾“å…¥" << NO << "ç©å®¶é˜²å®ˆæ—¶æ‰“å‡ºç¬¬å‡ å¼ ç‰Œ" << endl;
+			cin >> i;
+			cout << endl;
+		} while (i<0 || i>num);
 		return i;
 	}
 	int Check_self(int i);//return !=3
