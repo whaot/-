@@ -104,10 +104,7 @@ bool Role::d_judge(card desk, card hand)
 int Role::Defend(int loc)
 
 {
-	if (loc == 0)
-	{
-		return 0;
-	}
+	if (loc == 0){return 0;}
 	bool b = d_judge(Desk[Desk_n - 1], Cards[loc - 1]);
 	if (b)
 	{
@@ -132,16 +129,10 @@ int Role::Check_self(int i)//return !=3
 	{
 	case 0:GetBack_cards();  Desk_clean(); return 0;
 	case 1:break;
-	case 2:cout << "是否主动收牌?\n0:收" << endl; int i; cin >> i; cout << endl;
-		if (i == 0)
-		{
-			return Check_self(0);
-		}
-		else
-			return 2;
+	case 2:break;
 	case 3:
 		cout << "本次选择无效";
-		Check_self(Defend(i = def_get()));//choose_again
+		Check_self(i=Defend( def_get()));//choose_again
 		break;
 	}
 	return i;
