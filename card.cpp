@@ -62,6 +62,8 @@ void Shuffle()				//洗牌
 		//Swap(&arr[i], &arr[(rand() + i) % 53]);
 		Swap(&arr[rand() % (i + 1)], &arr[i]);//随机交换
 	}
+	if (arr[53].color == 'j')
+		Shuffle();
 }
 int choose_m_col_1()
 {
@@ -70,8 +72,7 @@ int choose_m_col_1()
 	{ srand((unsigned)time(NULL)); 
 	i = rand() % 16;//0-15
 	m_col = arr[i].color;
-	}
-	while (m_col == 'j');//主花色不可为鬼牌
+	}while (m_col == 'j');//主花色不可为鬼牌
 	return i;
 };
 void choose_m_col()
@@ -91,12 +92,4 @@ void Desk_Show()
 	}
 	cout << endl;
 }
-//int main()
-//{
-//	card a, b;
-//	a.value = 1; b.value = 2;
-//	Swap(&a,& b);
-//	cout << a.value;
-//	system("pause");
-//	return 0;
-//}
+
