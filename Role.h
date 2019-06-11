@@ -9,13 +9,16 @@ extern int arr_loc;//牌堆顶部对应数组位置
 extern int Desk_n;//当前桌面上牌数
 class Role
 {
+	friend class Scene;
 private:
-	card  Cards[30] ;//手牌
+	
+
 	int num;  //手牌数
 	int NO;						//角色编号
 public:
-	Role(int i );
+	Role(int i);
 	~Role();
+	card  Cards[54] ;//手牌
 	void Sequence();
 	char Get_col(int i) { return Cards[i - 1].color; }
 	int  Get_val(int i) { return Cards[i - 1].value; }
@@ -25,6 +28,8 @@ public:
     void Get_cards();//牌堆
 	void GetBack_cards();//桌面牌组
 	void Show();
+	void Showem();
+	void clean();
 	bool a_judge(int i,card hand);//桌面牌组,数量，将要打出手牌
 	bool d_judge(card desk, card hand);
 	int Attack(int loc);//桌面牌组，桌面牌数量，手牌的位置
@@ -33,28 +38,9 @@ public:
 						//返回3, 本次选择无效
 	void card_out(int loc);//获得loc为X-1；第X张牌打出
 	//待修改版本↓
-	int att_get()
-	{
-		int i;
-		do {
-			cout << "输入" << NO << "玩家进攻时打出第几张牌" << endl;
-			cin >> i;
-			cout << endl;} 
-		while (i<0 || i>num);
-		return i;
-	}
+	int att_get();
 	//待修改版本↓
-	int def_get()
-	{
-		int i; do {
-
-
-			cout << "输入" << NO << "玩家防守时打出第几张牌" << endl;
-			cin >> i;
-			cout << endl;
-		} while (i<0 || i>num);
-		return i;
-	}
+	int def_get();
 	int Check_self(int i);//return !=3
 	int Check_defender(int i);
 
